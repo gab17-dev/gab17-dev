@@ -1,0 +1,52 @@
+echo "# gab17-dev" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+
+def get_valid_input(prompt, min_value, max_value):
+  """Gets valid input from the user within a specified range."""
+  while True:
+    try:
+      value = float(input(prompt))
+      if min_value <= value <= max_value:
+        return value
+      else:
+        print(f"Invalid input. Please enter a value between {min_value} and {max_value}.")
+    except ValueError:
+      print("Invalid input. Please enter a number.")
+
+# Get user inputs
+absences = get_valid_input("Enter number of absences: ", 0, float('inf'))
+prelim_exam_grade = get_valid_input("Enter Prelim Exam Grade (0-100): ", 0, 100)
+quizzes_grade = get_valid_input("Enter Quizzes Grade (0-100): ", 0, 100)
+requirements_grade = get_valid_input("Enter Requirements Grade (0-100): ", 0, 100)
+recitation_grade = get_valid_input("Enter Recitation Grade (0-100): ", 0, 100)
+
+# Attendance Calculation
+attendance = 100 - (absences * 10)
+if absences >= 4:
+  print("FAILED")
+  exit()
+
+# Class Standing Calculation
+class_standing = (quizzes_grade * 0.4) + (requirements_grade * 0.3) + (recitation_grade * 0.3)
+
+# Prelim Grade Calculation
+prelim_grade = (prelim_exam_grade * 0.6) + (attendance * 0.1) + (class_standing * 0.3)
+
+# Target Midterm and Final Grades
+print("\nTarget Grades:")
+
+# Passing (75% overall grade)
+target_midterm_passing = (75 - (prelim_grade * 0.2) - (50 * 0.5)) / 0.3
+target_final_passing = (75 - (prelim_grade * 0.2) - (target_midterm_passing * 0.3)) / 0.5
+print(f"Passing (75%): Midterm = {target_midterm_passing:.2f}, Final = {target_final_passing:.2f}")
+
+# Dean's Lister (90% overall grade)
+target_midterm_dean = (90 - (prelim_grade * 0.2) - (50 * 0.5)) / 0.3
+target_final_dean = (90 - (prelim_grade * 0.2) - (target_midterm_dean * 0.3)) / 0.5
+print(f"Dean's Lister (90%): Midterm = {target_midterm_dean:.2f}, Final = {target_final_dean:.2f}")
+
+git branch -M main
+git remote add origin https://github.com/gab17-dev/gab17-dev.git
+git push -u origin main
